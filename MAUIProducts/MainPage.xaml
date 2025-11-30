@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="hw4_1_maui.MainPage"
+             xmlns:models="clr-namespace:hw4_1_maui.Models"
+             Title="Товари">
+    <Grid RowDefinitions="Auto, *, Auto" Padding="10" RowSpacing="10">
+        <Frame Grid.Row="0" BorderColor="Gray" CornerRadius="5" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Новий товар" FontAttributes="Bold" FontSize="16"/>
+
+                <Entry x:Name="NameEntry" Placeholder="Введіть назву (напр. Хліб)" />
+
+                <Grid ColumnDefinitions="*, *, *">
+                    <Entry Grid.Column="0" x:Name="CountryEntry" Placeholder="Країна" Margin="0,0,5,0"/>
+                    <Entry Grid.Column="1" x:Name="DescEntry" Placeholder="Опис"/>
+                    <Entry Grid.Column="2" x:Name="PriceEntry" Placeholder="Ціна" Keyboard="Numeric"/>
+                </Grid>
+
+                <Picker x:Name="TypePicker" Title="Оберіть тип товару">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Продукт харчування</x:String>
+                            <x:String>Книга</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
+                </Picker>
+            </VerticalStackLayout>
+        </Frame>
+        <CollectionView x:Name="ItemsCollectionView" 
+                        Grid.Row="1"
+                        SelectionMode="Single"
+                        ItemsSource="{Binding Products}">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Product">
+                    <Grid ColumnDefinitions="*, *, *, *" Padding="5">
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer NumberOfTapsRequired="2" Tapped="OnItemDoubleTapped" />
+                        </Grid.GestureRecognizers>
+
+                        <Label Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding OriginCountry}" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+                        <Label Grid.Column="2" Text="{Binding Description}" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="{Binding Price, StringFormat='{0:C}'}" HorizontalOptions="End" VerticalOptions="Center" FontAttributes="Bold"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <StackLayout Grid.Row="2" Orientation="Horizontal" Spacing="10" HorizontalOptions="CenterAndExpand">
+            <Button Text="➕ Додати" Clicked="OnAddProductClicked" BackgroundColor="#2196F3"/>
+            <Button Text="🗑️ Видалити" Clicked="OnDeleteProductClicked" BackgroundColor="#F44336"/>
+        </StackLayout>
+
+    </Grid>
+</ContentPage>
